@@ -128,126 +128,127 @@ export default function CreateRoute() {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-        <div className="mb-4">
-          <label htmlFor="startPoint" className="block text-gray-700 font-medium mb-2">
-            Начальная точка
-          </label>
-          <input
-            type="text"
-            id="startPoint"
-            value={startPoint}
-            onChange={(e) => setStartPoint(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Введите адрес или название места"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="endPoint" className="block text-gray-700 font-medium mb-2">
-            Конечная точка
-          </label>
-          <input
-            type="text"
-            id="endPoint"
-            value={endPoint}
-            onChange={(e) => setEndPoint(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Введите адрес или название места"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="travelTime" className="block text-gray-700 font-medium mb-2">
-            Время пути (в часах)
-          </label>
-          <input
-            type="number"
-            id="travelTime"
-            value={travelTime}
-            onChange={(e) => setTravelTime(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Например: 3"
-            min="0.5"
-            max="24"
-            step="0.5"
-            required
-          />
-        </div>
-
-        <div className="mb-6">
-          <p className="block text-gray-700 font-medium mb-2">Включить в маршрут:</p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={includeRestaurants}
-                onChange={(e) => setIncludeRestaurants(e.target.checked)}
-                className="mr-2 h-4 w-4 text-green-600"
-              />
-              Рестораны
+          <div className="mb-4">
+            <label htmlFor="startPoint" className="block text-gray-700 font-medium mb-2">
+              Начальная точка
             </label>
-
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={includeCafes}
-                onChange={(e) => setIncludeCafes(e.target.checked)}
-                className="mr-2 h-4 w-4 text-green-600"
-              />
-              Кафе
-            </label>
-
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={includeShops}
-                onChange={(e) => setIncludeShops(e.target.checked)}
-                className="mr-2 h-4 w-4 text-green-600"
-              />
-              Магазины
-            </label>
-
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={includeParks}
-                onChange={(e) => setIncludeParks(e.target.checked)}
-                className="mr-2 h-4 w-4 text-green-600"
-              />
-              Парки
-            </label>
-
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={includeExhibitions}
-                onChange={(e) => setIncludeExhibitions(e.target.checked)}
-                className="mr-2 h-4 w-4 text-green-600"
-              />
-              Выставки
-            </label>
+            <input
+              type="text"
+              id="startPoint"
+              value={startPoint}
+              onChange={(e) => setStartPoint(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder="Введите адрес или название места"
+              required
+            />
           </div>
-        </div>
 
-        <div className="flex justify-between">
-          <Link
-            href="/"
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
-          >
-            Назад
-          </Link>
+          <div className="mb-4">
+            <label htmlFor="endPoint" className="block text-gray-700 font-medium mb-2">
+              Конечная точка
+            </label>
+            <input
+              type="text"
+              id="endPoint"
+              value={endPoint}
+              onChange={(e) => setEndPoint(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder="Введите адрес или название места"
+              required
+            />
+          </div>
 
-          <button
-            type="submit"
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-          >
-            Создать маршрут
-          </button>
-        </div>
-      </form>
+          <div className="mb-4">
+            <label htmlFor="travelTime" className="block text-gray-700 font-medium mb-2">
+              Время пути (в часах)
+            </label>
+            <input
+              type="number"
+              id="travelTime"
+              value={travelTime}
+              onChange={(e) => setTravelTime(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder="Например: 3"
+              min="0.5"
+              max="24"
+              step="0.5"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <p className="block text-gray-700 font-medium mb-2">Включить в маршрут:</p>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={includeRestaurants}
+                  onChange={(e) => setIncludeRestaurants(e.target.checked)}
+                  className="mr-2 h-4 w-4 text-green-600"
+                />
+                Рестораны
+              </label>
+
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={includeCafes}
+                  onChange={(e) => setIncludeCafes(e.target.checked)}
+                  className="mr-2 h-4 w-4 text-green-600"
+                />
+                Кафе
+              </label>
+
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={includeShops}
+                  onChange={(e) => setIncludeShops(e.target.checked)}
+                  className="mr-2 h-4 w-4 text-green-600"
+                />
+                Магазины
+              </label>
+
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={includeParks}
+                  onChange={(e) => setIncludeParks(e.target.checked)}
+                  className="mr-2 h-4 w-4 text-green-600"
+                />
+                Парки
+              </label>
+
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={includeExhibitions}
+                  onChange={(e) => setIncludeExhibitions(e.target.checked)}
+                  className="mr-2 h-4 w-4 text-green-600"
+                />
+                Выставки
+              </label>
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <Link
+              href="/"
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+            >
+              Назад
+            </Link>
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+            >
+              Создать маршрут
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
