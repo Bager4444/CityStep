@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { MapMarker } from '../../components/map/MapComponent'
+import AddressSearch from '../../components/search/AddressSearch'
 
 // Динамический импорт компонента карты
 const MapComponent = dynamic(
@@ -35,6 +36,20 @@ export default function CreateRoute() {
   const [endMarker, setEndMarker] = useState<MapMarker | null>(null)
   const [mapMode, setMapMode] = useState<'start' | 'end'>('start') // Режим выбора точки на карте
 
+  // Обновление центра карты при изменении маркеров
+  useEffect(() => {
+    if (startMarker && !endMarker) {
+      setMapCenter(startMarker.position)
+    } else if (endMarker && !startMarker) {
+      setMapCenter(endMarker.position)
+    } else if (startMarker && endMarker) {
+      // Центрируем карту между начальной и конечной точками
+      const lat = (startMarker.position[0] + endMarker.position[0]) / 2
+      const lng = (startMarker.position[1] + endMarker.position[1]) / 2
+      setMapCenter([lat, lng])
+    }
+  }, [startMarker, endMarker])
+
   // Обработчик клика по карте
   const handleMapClick = (position: [number, number]) => {
     if (mapMode === 'start') {
@@ -56,6 +71,19 @@ export default function CreateRoute() {
       })
       setEndPoint(`Точка [${position[0].toFixed(4)}, ${position[1].toFixed(4)}]`)
     }
+  }
+
+  // Обработчик выбора адреса для начальной точки
+  const handleStartAddressSelect = (marker: MapMarker) => {
+    setStartMarker(marker)
+    setStartPoint(marker.title)
+    setMapMode('end') // Переключаемся на выбор конечной точки
+  }
+
+  // Обработчик выбора адреса для конечной точки
+  const handleEndAddressSelect = (marker: MapMarker) => {
+    setEndMarker(marker)
+    setEndPoint(marker.title)
   }
 
   // Обработчик отправки формы
@@ -129,32 +157,20 @@ export default function CreateRoute() {
 
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
           <div className="mb-4">
-            <label htmlFor="startPoint" className="block text-gray-700 font-medium mb-2">
-              Начальная точка
-            </label>
-            <input
-              type="text"
-              id="startPoint"
-              value={startPoint}
-              onChange={(e) => setStartPoint(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Введите адрес или название места"
-              required
+            <AddressSearch
+              type="start"
+              onAddressSelect={handleStartAddressSelect}
+              label="Начальная точка"
+              placeholder="Введите адрес начальной точки"
             />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="endPoint" className="block text-gray-700 font-medium mb-2">
-              Конечная точка
-            </label>
-            <input
-              type="text"
-              id="endPoint"
-              value={endPoint}
-              onChange={(e) => setEndPoint(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Введите адрес или название места"
-              required
+            <AddressSearch
+              type="end"
+              onAddressSelect={handleEndAddressSelect}
+              label="Конечная точка"
+              placeholder="Введите адрес конечной точки"
             />
           </div>
 
