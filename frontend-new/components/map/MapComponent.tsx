@@ -57,6 +57,7 @@ interface MapComponentProps {
   height?: string;
   onMarkerClick?: (marker: MapMarker) => void;
   onMapClick?: (position: [number, number]) => void;
+  onMapReady?: (map: LeafletMap) => void;
   interactive?: boolean; // Разрешить взаимодействие с картой (клики, перетаскивание и т.д.)
 }
 
@@ -68,6 +69,7 @@ const MapComponent = ({
   height = '500px',
   onMarkerClick,
   onMapClick,
+  onMapReady,
   interactive = true
 }: MapComponentProps) => {
   const [isMounted, setIsMounted] = useState(false)
@@ -196,6 +198,9 @@ const MapComponent = ({
       },
       load: (e) => {
         mapRef.current = e.target;
+        if (onMapReady) {
+          onMapReady(e.target);
+        }
       }
     });
     return null;

@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { MapMarker, MapRoute } from '../../../components/map/MapComponent'
 import RouteDirections from '../../../components/routes/RouteDirections'
+import LocationTracker from '../../../components/map/LocationTracker'
+import CurrentLocationMarker from '../../../components/map/CurrentLocationMarker'
 
 // Динамический импорт компонента карты
 const MapComponent = dynamic(
@@ -76,6 +78,9 @@ const mockRouteData = {
 
 export default function RoutePage({ params }: { params: { id: string } }) {
   const [activeStep, setActiveStep] = useState(0)
+  const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null) // Текущее местоположение
+  const [trackingEnabled, setTrackingEnabled] = useState(false) // Состояние отслеживания
+  const mapRef = useRef<L.Map | null>(null) // Ссылка на карту
 
   // В реальном приложении здесь будет запрос к API для получения данных маршрута
   const routeData = mockRouteData
@@ -157,6 +162,27 @@ export default function RoutePage({ params }: { params: { id: string } }) {
               }
             }}
             interactive={true}
+            onMapReady={(map) => {
+              mapRef.current = map;
+            }}
+          />
+
+          {/* Компонент отслеживания местоположения */}
+          <LocationTracker
+            onLocationUpdate={(position) => {
+              setCurrentLocation(position);
+              // Если отслеживание включено, центрируем карту на текущем местоположении
+              if (trackingEnabled && mapRef.current) {
+                mapRef.current.setView(position, mapRef.current.getZoom());
+              }
+            }}
+            enabled={trackingEnabled}
+          />
+
+          {/* Маркер текущего местоположения */}
+          <CurrentLocationMarker
+            map={mapRef.current}
+            position={currentLocation}
           />
 
           {/* Компонент с поворотами в углу карты */}
@@ -214,7 +240,22 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       </div>
 
       <div className="bg-white p-4 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">Навигация</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">Навигация</h2>
+
+          <button
+            onClick={() => setTrackingEnabled(!trackingEnabled)}
+            className={`px-4 py-2 rounded-md flex items-center ${
+              trackingEnabled ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
+            }`}
+          >
+            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {trackingEnabled ? 'Отслеживание включено' : 'Включить отслеживание'}
+          </button>
+        </div>
 
         <div className="flex items-center justify-between">
           <button

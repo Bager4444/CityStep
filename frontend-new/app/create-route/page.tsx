@@ -5,6 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { MapMarker } from '../../components/map/MapComponent'
 import AddressSearch from '../../components/search/AddressSearch'
+import RouteCreatedModal from '../../components/routes/RouteCreatedModal'
 
 // Динамический импорт компонента карты
 const MapComponent = dynamic(
@@ -29,12 +30,17 @@ export default function CreateRoute() {
   const [includeShops, setIncludeShops] = useState(false)
   const [includeParks, setIncludeParks] = useState(false)
   const [includeExhibitions, setIncludeExhibitions] = useState(false)
+  const [routeName, setRouteName] = useState('')
 
   // Данные для карты
   const [mapCenter, setMapCenter] = useState<[number, number]>([55.7558, 37.6173]) // Москва по умолчанию
   const [startMarker, setStartMarker] = useState<MapMarker | null>(null)
   const [endMarker, setEndMarker] = useState<MapMarker | null>(null)
   const [mapMode, setMapMode] = useState<'start' | 'end'>('start') // Режим выбора точки на карте
+
+  // Состояние модального окна
+  const [showModal, setShowModal] = useState(false)
+  const [createdRouteId, setCreatedRouteId] = useState('')
 
   // Обновление центра карты при изменении маркеров
   useEffect(() => {
@@ -87,24 +93,67 @@ export default function CreateRoute() {
   }
 
   // Обработчик отправки формы
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Здесь будет логика создания маршрута
-    console.log({
-      startPoint,
-      endPoint,
-      startMarker,
-      endMarker,
-      travelTime,
-      includeRestaurants,
-      includeCafes,
-      includeShops,
-      includeParks,
-      includeExhibitions
-    })
 
-    // В реальном приложении здесь будет запрос к API
-    alert('Маршрут создан! (демо)')
+    if (!startMarker || !endMarker || !travelTime) {
+      alert('Пожалуйста, укажите начальную и конечную точки, а также время пути')
+      return
+    }
+
+    // Формируем название маршрута, если оно не указано
+    const name = routeName || `Маршрут от ${startPoint} до ${endPoint}`
+
+    // Собираем типы мест для включения в маршрут
+    const includeTypes = []
+    if (includeRestaurants) includeTypes.push('restaurant')
+    if (includeCafes) includeTypes.push('cafe')
+    if (includeShops) includeTypes.push('shop')
+    if (includeParks) includeTypes.push('park')
+    if (includeExhibitions) includeTypes.push('exhibition')
+
+    try {
+      // Здесь будет запрос к API для создания маршрута
+      // В демо-режиме просто симулируем ответ сервера
+
+      // Симуляция запроса к API
+      // В реальном приложении здесь будет запрос к API
+      /*
+      const response = await fetch('/api/routes/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          start_point_name: startPoint,
+          start_latitude: startMarker.position[0],
+          start_longitude: startMarker.position[1],
+          end_point_name: endPoint,
+          end_latitude: endMarker.position[0],
+          end_longitude: endMarker.position[1],
+          travel_time: parseFloat(travelTime),
+          include_types: includeTypes
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Ошибка при создании маршрута')
+      }
+
+      const data = await response.json()
+      setCreatedRouteId(data.id)
+      */
+
+      // Демо-режим: генерируем случайный ID маршрута
+      const demoRouteId = Math.floor(Math.random() * 1000).toString()
+      setCreatedRouteId(demoRouteId)
+      setRouteName(name)
+      setShowModal(true)
+    } catch (error) {
+      console.error('Error creating route:', error)
+      alert('Произошла ошибка при создании маршрута. Пожалуйста, попробуйте еще раз.')
+    }
   }
 
   return (
@@ -112,6 +161,29 @@ export default function CreateRoute() {
       <h1 className="text-3xl font-bold mb-6">Создание маршрута</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Модальное окно после создания маршрута */}
+        {showModal && (
+          <RouteCreatedModal
+            routeId={createdRouteId}
+            routeName={routeName}
+            onClose={() => {
+              setShowModal(false)
+              // Сбрасываем форму после закрытия модального окна
+              setStartPoint('')
+              setEndPoint('')
+              setTravelTime('')
+              setStartMarker(null)
+              setEndMarker(null)
+              setIncludeRestaurants(false)
+              setIncludeCafes(false)
+              setIncludeShops(false)
+              setIncludeParks(false)
+              setIncludeExhibitions(false)
+              setRouteName('')
+              setMapMode('start')
+            }}
+          />
+        )}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4 text-green-700">Выберите точки на карте</h2>
           <p className="text-gray-600 mb-4">
@@ -156,6 +228,20 @@ export default function CreateRoute() {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+          <div className="mb-4">
+            <label htmlFor="routeName" className="block text-gray-700 font-medium mb-2">
+              Название маршрута (опционально)
+            </label>
+            <input
+              type="text"
+              id="routeName"
+              value={routeName}
+              onChange={(e) => setRouteName(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder="Например: Прогулка по центру Москвы"
+            />
+          </div>
+
           <div className="mb-4">
             <AddressSearch
               type="start"
