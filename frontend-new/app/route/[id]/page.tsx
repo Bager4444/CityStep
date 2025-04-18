@@ -108,11 +108,13 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       type: 'end'
     },
     // Точки маршрута
-    ...routeData.stops.map(stop => ({
+    ...routeData.stops.map((stop, index) => ({
       position: stop.position as [number, number],
-      title: stop.name,
-      description: stop.description,
-      type: stop.type as any
+      title: `${index + 1}. ${stop.name}`,
+      description: `${stop.description} (${stop.estimatedTime})`,
+      type: stop.type as any,
+      // Добавляем дополнительные свойства для активной точки
+      active: index === activeStep
     }))
   ];
 
@@ -144,6 +146,16 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             markers={mapMarkers}
             routes={mapRoutes}
             height="500px"
+            onMarkerClick={(marker) => {
+              // При клике на маркер точки маршрута переключаемся на нее
+              const stopIndex = routeData.stops.findIndex(
+                stop => stop.position[0] === marker.position[0] && stop.position[1] === marker.position[1]
+              );
+              if (stopIndex !== -1) {
+                setActiveStep(stopIndex);
+              }
+            }}
+            interactive={true}
           />
         </div>
 

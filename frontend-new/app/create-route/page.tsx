@@ -104,6 +104,8 @@ export default function CreateRoute() {
                 setMapMode('end')
               }
             }}
+            onMapClick={handleMapClick}
+            interactive={true}
           />
 
           <div className="mt-4 flex justify-between">
