@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { MapMarker, MapRoute } from '../../../components/map/MapComponent'
+import RouteDirections from '../../../components/routes/RouteDirections'
 
 // Динамический импорт компонента карты
 const MapComponent = dynamic(
@@ -139,7 +140,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 relative">
           <MapComponent
             center={activePosition}
             zoom={14}
@@ -157,6 +158,34 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             }}
             interactive={true}
           />
+
+          {/* Компонент с поворотами в углу карты */}
+          <div className="absolute top-4 right-4 w-80 z-10">
+            <RouteDirections
+              startPoint={{
+                name: routeData.startPoint,
+                latitude: routeData.startPosition[0],
+                longitude: routeData.startPosition[1]
+              }}
+              endPoint={{
+                name: routeData.endPoint,
+                latitude: routeData.endPosition[0],
+                longitude: routeData.endPosition[1]
+              }}
+              places={routeData.stops.map((stop, index) => ({
+                position: stop.position as [number, number],
+                title: stop.name,
+                id: stop.id,
+                order: index + 1
+              }))}
+              onDirectionClick={(placeId) => {
+                const stopIndex = routeData.stops.findIndex(stop => stop.id === placeId);
+                if (stopIndex !== -1) {
+                  setActiveStep(stopIndex);
+                }
+              }}
+            />
+          </div>
         </div>
 
         <div className="bg-white p-4 rounded-lg shadow-md">
