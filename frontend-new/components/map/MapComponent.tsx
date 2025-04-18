@@ -40,7 +40,7 @@ export interface MapMarker {
   position: [number, number];
   title: string;
   description?: string;
-  type?: 'start' | 'end' | 'attraction' | 'cafe' | 'restaurant' | 'shop' | 'park' | 'exhibition';
+  type?: 'start' | 'end' | 'attraction' | 'cafe' | 'restaurant' | 'shop' | 'park' | 'exhibition' | 'home';
   active?: boolean; // Для выделения активной точки
 }
 
@@ -157,6 +157,12 @@ const MapComponent = ({
           iconUrl: '/markers/exhibition-marker.svg',
           iconSize: [32, 32],
           iconAnchor: [16, 32],
+        }),
+        home: L.icon({
+          ...iconOptions,
+          iconUrl: '/markers/home-marker.svg',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
         })
       }
 
@@ -245,6 +251,7 @@ const MapComponent = ({
                     {marker.type === 'shop' && 'Магазин'}
                     {marker.type === 'park' && 'Парк'}
                     {marker.type === 'exhibition' && 'Выставка'}
+                    {marker.type === 'home' && 'Дом'}
                   </p>
                 )}
               </div>

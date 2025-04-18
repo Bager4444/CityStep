@@ -163,6 +163,9 @@ export default function CreateRoute() {
               label="Начальная точка"
               placeholder="Введите адрес начальной точки"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Вы можете ввести адрес дома или любого другого места
+            </p>
           </div>
 
           <div className="mb-4">
@@ -172,6 +175,9 @@ export default function CreateRoute() {
               label="Конечная точка"
               placeholder="Введите адрес конечной точки"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Вы можете ввести адрес дома или любого другого места
+            </p>
           </div>
 
           <div className="mb-4">
