@@ -4,34 +4,34 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/lib/database.types';
 
 /**
- * @api {get} /api/routes Получение всех маршрутов пользователя
- * @apiName GetRoutes
- * @apiGroup Routes
- * @apiSuccess {Object[]} routes Список маршрутов пользователя
+ * @api {get} /api/profile Получение профиля текущего пользователя
+ * @apiName GetProfile
+ * @apiGroup Profile
+ * @apiSuccess {Object} profile Профиль пользователя
  * @apiError {String} error Сообщение об ошибке
  */
 export async function GET(request: NextRequest) {
   try {
     // Получаем текущего пользователя
     const supabaseClient = createServerComponentClient<Database>({ cookies: () => request.cookies });
-
+    
     const { data: { user } } = await supabaseClient.auth.getUser();
-
+    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    // Получаем маршруты пользователя
+    
+    // Получаем профиль пользователя
     const { data, error } = await supabase
-      .from('routes')
+      .from('profiles')
       .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
-
+      .eq('id', user.id)
+      .single();
+    
     if (error) {
       throw error;
     }
-
+    
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -39,48 +39,40 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * @api {post} /api/routes Создание нового маршрута
- * @apiName CreateRoute
- * @apiGroup Routes
- * @apiParam {String} name Название маршрута
- * @apiParam {String} start_point_name Название начальной точки
- * @apiParam {Number} start_latitude Широта начальной точки
- * @apiParam {Number} start_longitude Долгота начальной точки
- * @apiParam {String} end_point_name Название конечной точки
- * @apiParam {Number} end_latitude Широта конечной точки
- * @apiParam {Number} end_longitude Долгота конечной точки
- * @apiParam {Number} travel_time Время пути (в часах)
- * @apiSuccess {Object} route Созданный маршрут
+ * @api {put} /api/profile Обновление профиля текущего пользователя
+ * @apiName UpdateProfile
+ * @apiGroup Profile
+ * @apiParam {String} username Имя пользователя
+ * @apiParam {String} avatar_url URL аватара пользователя
+ * @apiSuccess {Object} profile Обновленный профиль пользователя
  * @apiError {String} error Сообщение об ошибке
  */
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   try {
     // Получаем текущего пользователя
     const supabaseClient = createServerComponentClient<Database>({ cookies: () => request.cookies });
-
+    
     const { data: { user } } = await supabaseClient.auth.getUser();
-
+    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    // Получаем данные маршрута из запроса
-    const routeData = await request.json();
-
-    // Добавляем ID пользователя
-    routeData.user_id = user.id;
-
-    // Сохраняем маршрут в базу данных
+    
+    // Получаем данные для обновления
+    const updateData = await request.json();
+    
+    // Обновляем профиль пользователя
     const { data, error } = await supabase
-      .from('routes')
-      .insert(routeData)
+      .from('profiles')
+      .update(updateData)
+      .eq('id', user.id)
       .select()
       .single();
-
+    
     if (error) {
       throw error;
     }
-
+    
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
