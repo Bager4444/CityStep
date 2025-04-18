@@ -4,9 +4,23 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { MapMarker, MapRoute } from '../../../components/map/MapComponent'
-import RouteDirections from '../../../components/routes/RouteDirections'
-import LocationTracker from '../../../components/map/LocationTracker'
-import CurrentLocationMarker from '../../../components/map/CurrentLocationMarker'
+import type L from 'leaflet'
+
+// Динамический импорт компонентов, которые должны работать только на клиенте
+const RouteDirections = dynamic(
+  () => import('../../../components/routes/RouteDirections'),
+  { ssr: false }
+)
+
+const LocationTracker = dynamic(
+  () => import('../../../components/map/LocationTracker'),
+  { ssr: false }
+)
+
+const CurrentLocationMarker = dynamic(
+  () => import('../../../components/map/CurrentLocationMarker'),
+  { ssr: false }
+)
 
 // Динамический импорт компонента карты
 const MapComponent = dynamic(

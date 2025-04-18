@@ -1,5 +1,7 @@
 'use client'
 
+// Этот компонент должен использоваться только на клиенте
+
 import { useEffect } from 'react'
 import L from 'leaflet'
 
