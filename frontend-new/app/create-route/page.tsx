@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import type { MapMarker } from '@/components/map/MapComponent'
+import type { MapMarker } from '../../components/map/MapComponent'
 
 // Динамический импорт компонента карты
 const MapComponent = dynamic(
-  () => import('@/components/map/MapComponent'),
+  () => import('../../components/map/MapComponent'),
   {
     ssr: false,
     loading: () => (
