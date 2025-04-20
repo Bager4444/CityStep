@@ -5,6 +5,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { MapMarker, MapRoute } from '../../../components/map/MapComponent'
 import type L from 'leaflet'
+import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid'
 
 // Динамический импорт компонентов, которые должны работать только на клиенте
 const RouteDirections = dynamic(
@@ -19,6 +20,16 @@ const LocationTracker = dynamic(
 
 const CurrentLocationMarker = dynamic(
   () => import('../../../components/map/CurrentLocationMarker'),
+  { ssr: false }
+)
+
+const DirectionArrow = dynamic(
+  () => import('../../../components/navigation/DirectionArrow'),
+  { ssr: false }
+)
+
+const NavigationPanel = dynamic(
+  () => import('../../../components/navigation/NavigationPanel'),
   { ssr: false }
 )
 
@@ -90,11 +101,28 @@ const mockRouteData = {
   ]
 }
 
+// Функция для расчета расстояния между двумя точками в километрах
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371 // Радиус Земли в км
+  const dLat = (lat2 - lat1) * Math.PI / 180
+  const dLon = (lon2 - lon1) * Math.PI / 180
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+  return R * c
+}
+
 export default function RoutePage({ params }: { params: { id: string } }) {
   const [activeStep, setActiveStep] = useState(0)
   const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null) // Текущее местоположение
   const [trackingEnabled, setTrackingEnabled] = useState(false) // Состояние отслеживания
   const mapRef = useRef<L.Map | null>(null) // Ссылка на карту
+
+  // Состояние навигации
+  const [navigationMode, setNavigationMode] = useState(false)
+  const [nextStopDistance, setNextStopDistance] = useState<number | null>(null)
 
   // В реальном приложении здесь будет запрос к API для получения данных маршрута
   const routeData = mockRouteData
@@ -110,6 +138,37 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       setActiveStep(activeStep - 1)
     }
   }
+
+  // Запуск/остановка режима навигации
+  const toggleNavigationMode = () => {
+    if (!navigationMode) {
+      // Запускаем режим навигации
+      setNavigationMode(true)
+      setTrackingEnabled(true) // Автоматически включаем отслеживание
+    } else {
+      // Останавливаем режим навигации
+      setNavigationMode(false)
+    }
+  }
+
+  // Расчет расстояния до следующей точки
+  useEffect(() => {
+    if (currentLocation && navigationMode) {
+      const nextStopPosition = routeData.stops[activeStep].position as [number, number]
+      const distance = calculateDistance(
+        currentLocation[0],
+        currentLocation[1],
+        nextStopPosition[0],
+        nextStopPosition[1]
+      )
+      setNextStopDistance(distance)
+
+      // Если расстояние меньше 50 метров, переходим к следующей точке
+      if (distance < 0.05 && activeStep < routeData.stops.length - 1) {
+        setActiveStep(activeStep + 1)
+      }
+    }
+  }, [currentLocation, activeStep, navigationMode])
 
   // Подготовка данных для карты
   const mapMarkers: MapMarker[] = [
@@ -146,10 +205,12 @@ export default function RoutePage({ params }: { params: { id: string } }) {
     }
   ];
 
-  // Центр карты - текущая активная точка
-  const activePosition = activeStep < routeData.stops.length
-    ? routeData.stops[activeStep].position as [number, number]
-    : routeData.startPosition as [number, number];
+  // Центр карты - текущая активная точка или текущее местоположение в режиме навигации
+  const activePosition = navigationMode && currentLocation
+    ? currentLocation
+    : activeStep < routeData.stops.length
+      ? routeData.stops[activeStep].position as [number, number]
+      : routeData.startPosition as [number, number];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -199,8 +260,40 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             position={currentLocation}
           />
 
-          {/* Компонент с поворотами в углу карты */}
-          <div className="absolute top-4 right-4 w-80 z-10">
+          {/* Стрелка направления в режиме навигации */}
+          <DirectionArrow
+            currentPosition={currentLocation}
+            targetPosition={activeStep < routeData.stops.length
+              ? routeData.stops[activeStep].position as [number, number]
+              : null}
+            visible={navigationMode && currentLocation !== null}
+          />
+
+          {/* Кнопка "В путь" */}
+          <div className="absolute bottom-4 right-4 z-10">
+            <button
+              onClick={toggleNavigationMode}
+              className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
+                navigationMode ? 'bg-red-600' : 'bg-blue-600'
+              } text-white font-medium`}
+            >
+              {navigationMode ? (
+                <>
+                  <PauseIcon className="h-5 w-5 mr-2" />
+                  Остановить
+                </>
+              ) : (
+                <>
+                  <PlayIcon className="h-5 w-5 mr-2" />
+                  В путь
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Компонент с поворотами в углу карты (только если не в режиме навигации) */}
+          {!navigationMode && (
+            <div className="absolute top-4 right-4 w-80 z-10">
             <RouteDirections
               startPoint={{
                 name: routeData.startPoint,
@@ -226,6 +319,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
               }}
             />
           </div>
+          )}
         </div>
 
         <div className="bg-white p-4 rounded-lg shadow-md">
@@ -253,7 +347,8 @@ export default function RoutePage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow-md mb-8">
+      {!navigationMode ? (
+        <div className="bg-white p-4 rounded-lg shadow-md mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Навигация</h2>
 
@@ -306,8 +401,18 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           </button>
         </div>
       </div>
+      ) : (
+        <NavigationPanel
+          currentPosition={currentLocation}
+          nextStopName={routeData.stops[activeStep].name}
+          nextStopDistance={nextStopDistance}
+          estimatedTime={routeData.stops[activeStep].estimatedTime}
+          onExit={() => setNavigationMode(false)}
+        />
+      )}
 
-      <div className="text-center">
+      {!navigationMode && (
+        <div className="text-center">
         <Link
           href="/saved-routes"
           className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
@@ -315,6 +420,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           Назад к списку маршрутов
         </Link>
       </div>
+      )}
     </div>
   )
 }
