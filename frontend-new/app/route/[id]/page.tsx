@@ -219,14 +219,14 @@ export default function RoutePage({ params }: { params: { id: string } }) {
         От {routeData.startPoint} до {routeData.endPoint} • {routeData.duration}
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-2 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        <div className="lg:col-span-5 relative">
           <MapComponent
             center={activePosition}
-            zoom={14}
+            zoom={13}
             markers={mapMarkers}
             routes={mapRoutes}
-            height="500px"
+            height="400px"
             onMarkerClick={(marker) => {
               // При клике на маркер точки маршрута переключаемся на нее
               const stopIndex = routeData.stops.findIndex(
@@ -322,7 +322,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="lg:col-span-7 bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Точки маршрута</h2>
 
           <div className="space-y-4">
