@@ -219,8 +219,8 @@ export default function RoutePage({ params }: { params: { id: string } }) {
         От {routeData.startPoint} до {routeData.endPoint} • {routeData.duration}
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-        <div className="lg:col-span-4 relative" style={{ maxWidth: '400px' }}>
+      <div className="grid grid-cols-1 gap-6 mb-8 lg:flex lg:flex-row-reverse">
+        <div className="lg:w-1/3 relative ml-6" style={{ maxWidth: '400px' }}>
           <MapComponent
             center={activePosition}
             zoom={13}
@@ -322,7 +322,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        <div className="lg:col-span-8 bg-white p-4 rounded-lg shadow-md">
+        <div className="lg:w-2/3 bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Точки маршрута</h2>
 
           <div className="space-y-4">
