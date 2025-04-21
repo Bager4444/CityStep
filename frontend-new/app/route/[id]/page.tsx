@@ -8,10 +8,6 @@ import type L from 'leaflet'
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid'
 
 // Динамический импорт компонентов, которые должны работать только на клиенте
-const RouteDirections = dynamic(
-  () => import('../../../components/routes/RouteDirections'),
-  { ssr: false }
-)
 
 const LocationTracker = dynamic(
   () => import('../../../components/map/LocationTracker'),
@@ -219,8 +215,8 @@ export default function RoutePage({ params }: { params: { id: string } }) {
         От {routeData.startPoint} до {routeData.endPoint} • {routeData.duration}
       </p>
 
-      <div className="grid grid-cols-1 gap-6 mb-8 lg:flex lg:flex-row-reverse">
-        <div className="lg:w-1/3 relative ml-6" style={{ maxWidth: '400px' }}>
+      <div className="flex flex-col lg:flex-row-reverse gap-6 mb-8 items-start">
+        <div className="lg:w-1/2 relative">
           <MapComponent
             center={activePosition}
             zoom={13}
@@ -290,39 +286,9 @@ export default function RoutePage({ params }: { params: { id: string } }) {
               )}
             </button>
           </div>
-
-          {/* Компонент с поворотами в углу карты (только если не в режиме навигации) */}
-          {!navigationMode && (
-            <div className="absolute top-4 right-4 w-80 z-10">
-            <RouteDirections
-              startPoint={{
-                name: routeData.startPoint,
-                latitude: routeData.startPosition[0],
-                longitude: routeData.startPosition[1]
-              }}
-              endPoint={{
-                name: routeData.endPoint,
-                latitude: routeData.endPosition[0],
-                longitude: routeData.endPosition[1]
-              }}
-              places={routeData.stops.map((stop, index) => ({
-                position: stop.position as [number, number],
-                title: stop.name,
-                id: stop.id,
-                order: index + 1
-              }))}
-              onDirectionClick={(placeId) => {
-                const stopIndex = routeData.stops.findIndex(stop => stop.id === placeId);
-                if (stopIndex !== -1) {
-                  setActiveStep(stopIndex);
-                }
-              }}
-            />
-          </div>
-          )}
         </div>
 
-        <div className="lg:w-2/3 bg-white p-4 rounded-lg shadow-md">
+        <div className="lg:w-1/2 bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Точки маршрута</h2>
 
           <div className="space-y-4">

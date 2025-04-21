@@ -238,21 +238,6 @@ export default function RouteDirections({
               <p className="text-xs text-gray-500">Конечная точка</p>
             </div>
           </div>
-
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="flex justify-between text-sm">
-              <span className="font-medium">Общее расстояние:</span>
-              <span>
-                {formatDistance(directions.reduce((sum, dir) => sum + dir.distance, 0))}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm mt-2">
-              <span className="font-medium">Примерное время:</span>
-              <span>
-                {Math.ceil(directions.reduce((sum, dir) => sum + dir.distance, 0) / 5 * 60)} мин
-              </span>
-            </div>
-          </div>
         </div>
       )}
     </div>
