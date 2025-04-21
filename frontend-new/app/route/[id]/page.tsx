@@ -216,7 +216,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       </p>
 
       <div className="flex flex-col lg:flex-row-reverse gap-6 mb-8 items-start">
-        <div className="lg:w-1/2 relative">
+        <div className="lg:w-1/2 relative z-10">
           <MapComponent
             center={activePosition}
             zoom={13}
@@ -266,7 +266,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           />
 
           {/* Кнопка "В путь" */}
-          <div className="absolute bottom-4 right-4 z-10">
+          <div className="absolute bottom-4 right-4 z-50">
             <button
               onClick={toggleNavigationMode}
               className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
@@ -314,7 +314,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       </div>
 
       {!navigationMode ? (
-        <div className="bg-white p-4 rounded-lg shadow-md mb-8">
+        <div className="bg-white p-4 rounded-lg shadow-md mb-8 relative z-40">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Навигация</h2>
 
