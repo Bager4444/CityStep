@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import type { MapMarker, MapRoute } from '../../../components/map/MapComponent'
 import type L from 'leaflet'
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid'
+import HomeInfoModal from '../../../components/map/HomeInfoModal'
 
 // Динамический импорт компонентов, которые должны работать только на клиенте
 
@@ -120,6 +121,9 @@ export default function RoutePage({ params }: { params: { id: string } }) {
   const [navigationMode, setNavigationMode] = useState(false)
   const [nextStopDistance, setNextStopDistance] = useState<number | null>(null)
 
+  // Состояние модального окна с информацией о доме
+  const [homeInfo, setHomeInfo] = useState<{ title: string; description: string } | null>(null)
+
   // В реальном приложении здесь будет запрос к API для получения данных маршрута
   const routeData = mockRouteData
 
@@ -190,7 +194,26 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       type: stop.type as any,
       // Добавляем дополнительные свойства для активной точки
       active: index === activeStep
-    }))
+    })),
+    // Дома рядом с маршрутом
+    {
+      position: [55.7535, 37.6190],
+      title: 'Жилой дом',
+      description: 'Исторический жилой дом в центре Москвы',
+      type: 'home'
+    },
+    {
+      position: [55.7620, 37.6100],
+      title: 'Жилой комплекс',
+      description: 'Современный жилой комплекс с апартаментами',
+      type: 'home'
+    },
+    {
+      position: [55.7580, 37.6150],
+      title: 'Доходный дом',
+      description: 'Исторический доходный дом XIX века',
+      type: 'home'
+    }
   ];
 
   // Маршрут между точками
@@ -224,12 +247,20 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             routes={mapRoutes}
             height="400px"
             onMarkerClick={(marker) => {
-              // При клике на маркер точки маршрута переключаемся на нее
-              const stopIndex = routeData.stops.findIndex(
-                stop => stop.position[0] === marker.position[0] && stop.position[1] === marker.position[1]
-              );
-              if (stopIndex !== -1) {
-                setActiveStep(stopIndex);
+              if (marker.type === 'home') {
+                // При клике на дом показываем модальное окно с информацией
+                setHomeInfo({
+                  title: marker.title,
+                  description: marker.description || ''
+                });
+              } else {
+                // При клике на маркер точки маршрута переключаемся на нее
+                const stopIndex = routeData.stops.findIndex(
+                  stop => stop.position[0] === marker.position[0] && stop.position[1] === marker.position[1]
+                );
+                if (stopIndex !== -1) {
+                  setActiveStep(stopIndex);
+                }
               }
             }}
             interactive={true}
@@ -386,6 +417,15 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           Назад к списку маршрутов
         </Link>
       </div>
+      )}
+
+      {/* Модальное окно с информацией о доме */}
+      {homeInfo && (
+        <HomeInfoModal
+          title={homeInfo.title}
+          description={homeInfo.description}
+          onClose={() => setHomeInfo(null)}
+        />
       )}
     </div>
   )
