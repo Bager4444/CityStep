@@ -198,19 +198,49 @@ export default function RoutePage({ params }: { params: { id: string } }) {
     {
       position: [55.7535, 37.6190],
       title: 'Жилой дом',
-      description: 'Исторический жилой дом в центре Москвы',
+      description: 'Исторический жилой дом в центре Москвы, построенный в начале XX века. Здание имеет богатую архитектуру с элементами модерна и классицизма.',
       type: 'home'
     },
     {
       position: [55.7620, 37.6100],
-      title: 'Жилой комплекс',
-      description: 'Современный жилой комплекс с апартаментами',
+      title: 'Жилой комплекс "Современный"',
+      description: 'Современный жилой комплекс с апартаментами, построенный в 2015 году. Включает в себя фитнес-центр, подземную парковку и зону отдыха.',
       type: 'home'
     },
     {
       position: [55.7580, 37.6150],
-      title: 'Доходный дом',
-      description: 'Исторический доходный дом XIX века',
+      title: 'Доходный дом Шаховских',
+      description: 'Исторический доходный дом XIX века, принадлежавший княжеской семье Шаховских. Отреставрирован в 2010 году с сохранением исторического облика.',
+      type: 'home'
+    },
+    {
+      position: [55.7550, 37.6170],
+      title: 'Усадьба Морозовых',
+      description: 'Историческая усадьба купеческой семьи Морозовых, построенная в конце XIX века. Сейчас здесь располагается музей быта московского купечества.',
+      type: 'home'
+    },
+    {
+      position: [55.7590, 37.6220],
+      title: 'Дом архитектора',
+      description: 'Особняк известного архитектора Федора Шехтеля, построенный в стиле модерн. Является памятником архитектуры федерального значения.',
+      type: 'home'
+    },
+    {
+      position: [55.7510, 37.6130],
+      title: 'Жилой дом "Сталинка"',
+      description: 'Жилой дом в стиле сталинского ампира, построенный в 1950-х годах. Отличается монументальностью и характерным декором фасада.',
+      type: 'home'
+    },
+    {
+      position: [55.7630, 37.6180],
+      title: 'Современные апартаменты',
+      description: 'Современный комплекс апартаментов бизнес-класса с панорамными окнами и видом на центр города. Построен в 2020 году.',
+      type: 'home'
+    },
+    {
+      position: [55.7560, 37.6080],
+      title: 'Историческая коммуналка',
+      description: 'Бывший доходный дом, в советское время разделенный на коммунальные квартиры. Сохранил атмосферу старой Москвы и уникальную планировку.',
       type: 'home'
     }
   ];
@@ -252,6 +282,11 @@ export default function RoutePage({ params }: { params: { id: string } }) {
                   title: marker.title,
                   description: marker.description || ''
                 });
+
+                // Центрируем карту на выбранном доме
+                if (mapRef.current) {
+                  mapRef.current.setView(marker.position, 15);
+                }
               } else {
                 // При клике на маркер точки маршрута переключаемся на нее
                 const stopIndex = routeData.stops.findIndex(
@@ -318,27 +353,68 @@ export default function RoutePage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        <div className="lg:w-1/2 bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Точки маршрута</h2>
+        <div className="lg:w-1/2 space-y-6">
+          {/* Точки маршрута */}
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Точки маршрута</h2>
 
-          <div className="space-y-4">
-            {routeData.stops.map((stop, index) => (
-              <div
-                key={stop.id}
-                className={`p-3 rounded-md cursor-pointer ${
-                  index === activeStep
-                    ? 'bg-green-100 border-l-4 border-green-600'
-                    : 'bg-gray-50 hover:bg-gray-100'
-                }`}
-                onClick={() => setActiveStep(index)}
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-medium">{stop.name}</h3>
-                  <span className="text-sm text-gray-500">{stop.estimatedTime}</span>
+            <div className="space-y-4">
+              {routeData.stops.map((stop, index) => (
+                <div
+                  key={stop.id}
+                  className={`p-3 rounded-md cursor-pointer ${
+                    index === activeStep
+                      ? 'bg-green-100 border-l-4 border-green-600'
+                      : 'bg-gray-50 hover:bg-gray-100'
+                  }`}
+                  onClick={() => setActiveStep(index)}
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium">{stop.name}</h3>
+                    <span className="text-sm text-gray-500">{stop.estimatedTime}</span>
+                  </div>
+                  <p className="text-sm text-gray-600">{stop.description}</p>
                 </div>
-                <p className="text-sm text-gray-600">{stop.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Дома рядом с маршрутом */}
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Интересные здания рядом</h2>
+
+            <div className="space-y-3">
+              {mapMarkers
+                .filter(marker => marker.type === 'home')
+                .map((home, index) => (
+                  <div
+                    key={`home-${index}`}
+                    className="p-3 rounded-md cursor-pointer bg-blue-50 hover:bg-blue-100 border-l-2 border-blue-300"
+                    onClick={() => {
+                      setHomeInfo({
+                        title: home.title,
+                        description: home.description || ''
+                      });
+
+                      // Центрируем карту на выбранном доме
+                      if (mapRef.current) {
+                        mapRef.current.setView(home.position, 15);
+                      }
+                    }}
+                  >
+                    <div className="flex items-center">
+                      <div className="bg-blue-100 p-1 rounded-full mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                      </div>
+                      <h3 className="font-medium text-blue-800">{home.title}</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">{home.description}</p>
+                  </div>
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -420,29 +496,42 @@ export default function RoutePage({ params }: { params: { id: string } }) {
 
       {/* Информация о доме */}
       {homeInfo && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative animate-scaleIn">
             <button
               onClick={() => setHomeInfo(null)}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              aria-label="Закрыть"
             >
-              X
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
 
             <div className="flex items-center mb-4">
               <div className="bg-blue-100 p-3 rounded-full mr-4">
-                <span className="text-blue-600 font-bold">H</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
               </div>
               <h2 className="text-xl font-semibold">{homeInfo.title}</h2>
             </div>
 
-            <p className="text-gray-600 mb-6">{homeInfo.description}</p>
+            <div className="border-l-4 border-blue-200 pl-4 mb-6">
+              <p className="text-gray-600">{homeInfo.description}</p>
+            </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-gray-500">
+                <span>Нажмите на карту, чтобы продолжить просмотр</span>
+              </div>
               <button
                 onClick={() => setHomeInfo(null)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
               >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
                 Закрыть
               </button>
             </div>

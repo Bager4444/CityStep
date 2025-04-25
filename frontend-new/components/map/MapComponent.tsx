@@ -163,8 +163,9 @@ const MapComponent = ({
         home: L.icon({
           ...iconOptions,
           iconUrl: '/markers/home-marker.svg',
-          iconSize: [32, 32],
-          iconAnchor: [16, 32],
+          iconSize: [36, 36], // Увеличиваем размер иконки для домов
+          iconAnchor: [18, 36],
+          className: 'home-marker' // Добавляем класс для стилизации
         })
       }
 
