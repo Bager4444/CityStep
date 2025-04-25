@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic'
 import type { MapMarker, MapRoute } from '../../../components/map/MapComponent'
 import type L from 'leaflet'
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid'
-import HomeInfoModal from '../../../components/map/HomeInfoModal'
 
 // Динамический импорт компонентов, которые должны работать только на клиенте
 
@@ -419,13 +418,36 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       </div>
       )}
 
-      {/* Модальное окно с информацией о доме */}
+      {/* Информация о доме */}
       {homeInfo && (
-        <HomeInfoModal
-          title={homeInfo.title}
-          description={homeInfo.description}
-          onClose={() => setHomeInfo(null)}
-        />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setHomeInfo(null)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              X
+            </button>
+
+            <div className="flex items-center mb-4">
+              <div className="bg-blue-100 p-3 rounded-full mr-4">
+                <span className="text-blue-600 font-bold">H</span>
+              </div>
+              <h2 className="text-xl font-semibold">{homeInfo.title}</h2>
+            </div>
+
+            <p className="text-gray-600 mb-6">{homeInfo.description}</p>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setHomeInfo(null)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
