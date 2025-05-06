@@ -188,7 +188,7 @@ const MapComponent = ({
     )
   }
 
-  // Компонент для обработки кликов по карте
+  // Компонент для обработки кликов по карте и маркерам
   const MapClickHandler = () => {
     const map = useMapEvents({
       click: (e) => {
@@ -204,6 +204,36 @@ const MapComponent = ({
         }
       }
     });
+
+    // Добавляем обработчики кликов для всех маркеров
+    useEffect(() => {
+      if (map && markers.length > 0 && onMarkerClick) {
+        console.log('Setting up marker click handlers');
+
+        // Находим все маркеры на карте
+        const markerElements = document.querySelectorAll('.leaflet-marker-icon');
+
+        markerElements.forEach((markerElement, index) => {
+          if (index < markers.length) {
+            markerElement.addEventListener('click', (e) => {
+              console.log('Marker element clicked:', markers[index]);
+              e.stopPropagation();
+              onMarkerClick(markers[index]);
+            });
+          }
+        });
+
+        return () => {
+          // Удаляем обработчики при размонтировании
+          markerElements.forEach((markerElement, index) => {
+            if (index < markers.length) {
+              markerElement.removeEventListener('click', () => {});
+            }
+          });
+        };
+      }
+    }, [map, markers, onMarkerClick]);
+
     return null;
   };
 
@@ -229,41 +259,40 @@ const MapComponent = ({
         />
 
         {/* Компонент для обработки кликов */}
-        {onMapClick && <MapClickHandler />}
+        <MapClickHandler />
 
         {/* Маркеры */}
-        {markers.map((marker, index) => (
-          <Marker
-            key={`marker-${index}`}
-            position={marker.position}
-            icon={marker.type && icons[marker.type] ? icons[marker.type] : icons.default || undefined}
-            eventHandlers={{
-              click: () => onMarkerClick && onMarkerClick(marker)
-            }}
-            // Добавляем класс для активного маркера
-            className={marker.active ? 'active-marker' : ''}
-          >
-            <Popup>
-              <div>
-                <h3 className="font-bold text-green-700">{marker.title}</h3>
-                {marker.description && <p className="text-sm">{marker.description}</p>}
-                {marker.type && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    {marker.type === 'start' && 'Начальная точка'}
-                    {marker.type === 'end' && 'Конечная точка'}
-                    {marker.type === 'attraction' && 'Достопримечательность'}
-                    {marker.type === 'cafe' && 'Кафе'}
-                    {marker.type === 'restaurant' && 'Ресторан'}
-                    {marker.type === 'shop' && 'Магазин'}
-                    {marker.type === 'park' && 'Парк'}
-                    {marker.type === 'exhibition' && 'Выставка'}
-                    {marker.type === 'home' && 'Дом'}
-                  </p>
-                )}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {markers.map((marker, index) => {
+          // Создаем уникальный id для маркера
+          const markerId = `marker-${index}-${marker.type}-${marker.title.replace(/\s+/g, '-').toLowerCase()}`;
+
+          return (
+            <Marker
+              key={markerId}
+              position={marker.position}
+              icon={marker.type && icons[marker.type] ? icons[marker.type] : icons.default || undefined}
+              eventHandlers={{
+                click: (e) => {
+                  console.log('Marker clicked:', marker);
+                  // Останавливаем всплытие события, чтобы не срабатывал клик по карте
+                  e.originalEvent.stopPropagation();
+                  if (onMarkerClick) {
+                    onMarkerClick(marker);
+                  }
+                }
+              }}
+              // Добавляем класс для активного маркера и тип маркера
+              className={`${marker.active ? 'active-marker' : ''} marker-${marker.type || 'default'}`}
+            >
+              <Popup>
+                <div>
+                  <h3 className="font-bold text-green-700">{marker.title}</h3>
+                  {marker.description && <p className="text-sm">{marker.description}</p>}
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
 
         {/* Маршруты */}
         {routes.map((route, index) => (

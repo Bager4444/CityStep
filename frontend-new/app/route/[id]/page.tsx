@@ -276,7 +276,10 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             routes={mapRoutes}
             height="400px"
             onMarkerClick={(marker) => {
+              console.log('Marker clicked in page.tsx:', marker);
+
               if (marker.type === 'home') {
+                console.log('Home marker clicked, showing modal');
                 // При клике на дом показываем модальное окно с информацией
                 setHomeInfo({
                   title: marker.title,
