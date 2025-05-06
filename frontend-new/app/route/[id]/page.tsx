@@ -267,6 +267,43 @@ export default function RoutePage({ params }: { params: { id: string } }) {
         От {routeData.startPoint} до {routeData.endPoint} • {routeData.duration}
       </p>
 
+      {/* Кнопки управления (В путь и Включить отслеживание) */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-[1000]">
+        {/* Кнопка "В путь" */}
+        <button
+          onClick={toggleNavigationMode}
+          className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
+            navigationMode ? 'bg-red-600' : 'bg-blue-600'
+          } text-white font-medium`}
+        >
+          {navigationMode ? (
+            <>
+              <PauseIcon className="h-5 w-5 mr-2" />
+              Остановить
+            </>
+          ) : (
+            <>
+              <PlayIcon className="h-5 w-5 mr-2" />
+              В путь
+            </>
+          )}
+        </button>
+
+        {/* Кнопка "Включить отслеживание" */}
+        <button
+          onClick={() => setTrackingEnabled(!trackingEnabled)}
+          className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
+            trackingEnabled ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-800'
+          }`}
+        >
+          <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {trackingEnabled ? 'Отслеживание включено' : 'Включить отслеживание'}
+        </button>
+      </div>
+
       <div className="flex flex-col lg:flex-row-reverse gap-6 mb-8 items-start">
         <div className="lg:w-1/2 relative z-10">
           <MapComponent
@@ -333,27 +370,7 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             visible={navigationMode && currentLocation !== null}
           />
 
-          {/* Кнопка "В путь" */}
-          <div className="absolute bottom-4 right-4 z-50">
-            <button
-              onClick={toggleNavigationMode}
-              className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
-                navigationMode ? 'bg-red-600' : 'bg-blue-600'
-              } text-white font-medium`}
-            >
-              {navigationMode ? (
-                <>
-                  <PauseIcon className="h-5 w-5 mr-2" />
-                  Остановить
-                </>
-              ) : (
-                <>
-                  <PlayIcon className="h-5 w-5 mr-2" />
-                  В путь
-                </>
-              )}
-            </button>
-          </div>
+          {/* Кнопка "В путь" перемещена из карты */}
         </div>
 
         <div className="lg:w-1/2 space-y-6">
@@ -424,21 +441,8 @@ export default function RoutePage({ params }: { params: { id: string } }) {
 
       {!navigationMode ? (
         <div className="bg-white p-4 rounded-lg shadow-md mb-8 relative z-40">
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4">
           <h2 className="text-xl font-semibold">Навигация</h2>
-
-          <button
-            onClick={() => setTrackingEnabled(!trackingEnabled)}
-            className={`px-4 py-2 rounded-md flex items-center ${
-              trackingEnabled ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
-            }`}
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {trackingEnabled ? 'Отслеживание включено' : 'Включить отслеживание'}
-          </button>
         </div>
 
         <div className="flex items-center justify-between">
