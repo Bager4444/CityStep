@@ -64,6 +64,7 @@ const mockRouteData = {
   startPoint: 'Гостиница "Москва"',
   endPoint: 'Вокзал',
   duration: '4 часа',
+  routeDescription: 'Маршрут от Гостиницы "Москва" до Вокзала через Красную площадь, ГУМ, кафе "Пушкинъ" и Большой театр',
   stops: [
     {
       id: '1',
@@ -340,8 +341,11 @@ export default function RoutePage({ params }: { params: { id: string } }) {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">{routeData.name}</h1>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-2">
         От {routeData.startPoint} до {routeData.endPoint} • {routeData.duration}
+      </p>
+      <p className="text-gray-700 mb-6 italic">
+        {routeData.routeDescription}
       </p>
 
       {/* Кнопки управления (В путь и Включить отслеживание) */}
