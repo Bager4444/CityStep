@@ -87,6 +87,21 @@ const MapComponent = ({
     link.crossOrigin = ''
     document.head.appendChild(link)
 
+    // Добавляем плагин для вращения маркеров
+    const script = document.createElement('script')
+    script.src = '/js/leaflet.rotatedMarker.js'
+    script.async = false // Изменяем на синхронную загрузку
+    document.head.appendChild(script)
+
+    // Проверяем, что скрипт загрузился
+    script.onload = () => {
+      console.log('Leaflet Rotated Marker plugin loaded successfully')
+    }
+
+    script.onerror = () => {
+      console.error('Failed to load Leaflet Rotated Marker plugin')
+    }
+
     // Импортируем иконки Leaflet
     import('leaflet').then((L) => {
       // Исправляем проблему с иконками в Leaflet
@@ -173,7 +188,15 @@ const MapComponent = ({
     })
 
     return () => {
-      document.head.removeChild(link)
+      if (document.head.contains(link)) {
+        document.head.removeChild(link)
+      }
+
+      // Удаляем скрипт плагина при размонтировании
+      const scriptElement = document.querySelector('script[src="/js/leaflet.rotatedMarker.js"]')
+      if (scriptElement && document.head.contains(scriptElement)) {
+        document.head.removeChild(scriptElement)
+      }
     }
   }, [])
 
@@ -299,9 +322,13 @@ const MapComponent = ({
           <Polyline
             key={`route-${index}`}
             positions={route.points}
-            color={route.color || '#16a34a'} // Зеленый цвет по умолчанию
-            weight={4}
-            opacity={0.7}
+            color="#8b5cf6" // Фиолетовый цвет
+            weight={5}
+            opacity={0.9}
+            className="purple-route"
+            smoothFactor={1}
+            lineCap="round"
+            lineJoin="round"
           />
         ))}
       </MapContainer>

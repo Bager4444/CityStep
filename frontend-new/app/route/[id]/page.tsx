@@ -29,6 +29,21 @@ const NavigationPanel = dynamic(
   { ssr: false }
 )
 
+const RouteArrow = dynamic(
+  () => import('../../../components/map/RouteArrow'),
+  { ssr: false }
+)
+
+const NavigatorScreen = dynamic(
+  () => import('../../../components/navigation/NavigatorScreen'),
+  { ssr: false }
+)
+
+const AnimatedRoute = dynamic(
+  () => import('../../../components/map/AnimatedRoute'),
+  { ssr: false }
+)
+
 // Динамический импорт компонента карты
 const MapComponent = dynamic(
   () => import('../../../components/map/MapComponent'),
@@ -119,6 +134,8 @@ export default function RoutePage({ params }: { params: { id: string } }) {
   // Состояние навигации
   const [navigationMode, setNavigationMode] = useState(false)
   const [nextStopDistance, setNextStopDistance] = useState<number | null>(null)
+  const [showNavigatorScreen, setShowNavigatorScreen] = useState(false) // Показывать экран навигатора
+  const [currentSpeed, setCurrentSpeed] = useState<number | null>(null) // Текущая скорость
 
   // Состояние модального окна с информацией о доме
   const [homeInfo, setHomeInfo] = useState<{ title: string; description: string } | null>(null)
@@ -144,13 +161,24 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       // Запускаем режим навигации
       setNavigationMode(true)
       setTrackingEnabled(true) // Автоматически включаем отслеживание
+      setShowNavigatorScreen(true) // Показываем экран навигатора
+
+      // Генерируем случайную скорость для демонстрации
+      const randomSpeed = Math.random() * 12 + 3
+      setCurrentSpeed(randomSpeed)
     } else {
       // Останавливаем режим навигации
       setNavigationMode(false)
+      setShowNavigatorScreen(false) // Скрываем экран навигатора
     }
   }
 
-  // Расчет расстояния до следующей точки
+  // Переключение между картой и экраном навигатора
+  const toggleNavigatorScreen = () => {
+    setShowNavigatorScreen(!showNavigatorScreen)
+  }
+
+  // Расчет расстояния до следующей точки и скорости
   useEffect(() => {
     if (currentLocation && navigationMode) {
       const nextStopPosition = routeData.stops[activeStep].position as [number, number]
@@ -166,6 +194,11 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       if (distance < 0.05 && activeStep < routeData.stops.length - 1) {
         setActiveStep(activeStep + 1)
       }
+
+      // Имитация расчета скорости (в реальном приложении будет использоваться GPS)
+      // Генерируем случайную скорость от 3 до 15 км/ч
+      const randomSpeed = Math.random() * 12 + 3
+      setCurrentSpeed(randomSpeed)
     }
   }, [currentLocation, activeStep, navigationMode])
 
@@ -249,9 +282,53 @@ export default function RoutePage({ params }: { params: { id: string } }) {
   const mapRoutes: MapRoute[] = [
     {
       points: routeData.routePoints as [number, number][],
-      color: '#16a34a' // Зеленый цвет
+      color: '#8b5cf6' // Фиолетовый цвет
     }
   ];
+
+  // Маршруты между домами
+  const homePositions = mapMarkers
+    .filter(marker => marker.type === 'home')
+    .map(marker => marker.position);
+
+  console.log('Дома на карте:', homePositions);
+
+  // Создаем интерполированные точки для маршрута между домами
+  let interpolatedPoints: [number, number][] = [];
+
+  // Создаем маршрут, соединяющий все дома
+  if (homePositions.length > 1) {
+    console.log('Создаем маршрут между домами:', homePositions);
+
+    // Добавляем больше точек между домами для более плавного маршрута
+    interpolatedPoints = [];
+
+    for (let i = 0; i < homePositions.length - 1; i++) {
+      const start = homePositions[i];
+      const end = homePositions[i + 1];
+
+      // Добавляем начальную точку
+      interpolatedPoints.push(start);
+
+      // Добавляем 10 промежуточных точек между домами
+      for (let j = 1; j <= 10; j++) {
+        const fraction = j / 11;
+        const lat = start[0] + fraction * (end[0] - start[0]);
+        const lng = start[1] + fraction * (end[1] - start[1]);
+        interpolatedPoints.push([lat, lng]);
+      }
+    }
+
+    // Добавляем последнюю точку
+    interpolatedPoints.push(homePositions[homePositions.length - 1]);
+
+    console.log('Интерполированные точки маршрута между домами:', interpolatedPoints);
+
+    mapRoutes.push({
+      points: interpolatedPoints,
+      color: '#8b5cf6' // Фиолетовый цвет
+    });
+  }
 
   // Центр карты - текущая активная точка или текущее местоположение в режиме навигации
   const activePosition = navigationMode && currentLocation
@@ -266,6 +343,43 @@ export default function RoutePage({ params }: { params: { id: string } }) {
       <p className="text-gray-600 mb-6">
         От {routeData.startPoint} до {routeData.endPoint} • {routeData.duration}
       </p>
+
+      {/* Кнопки управления (В путь и Включить отслеживание) */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-[1000]">
+        {/* Кнопка "В путь" */}
+        <button
+          onClick={toggleNavigationMode}
+          className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
+            navigationMode ? 'bg-red-600' : 'bg-blue-600'
+          } text-white font-medium`}
+        >
+          {navigationMode ? (
+            <>
+              <PauseIcon className="h-5 w-5 mr-2" />
+              Остановить
+            </>
+          ) : (
+            <>
+              <PlayIcon className="h-5 w-5 mr-2" />
+              В путь
+            </>
+          )}
+        </button>
+
+        {/* Кнопка "Включить отслеживание" */}
+        <button
+          onClick={() => setTrackingEnabled(!trackingEnabled)}
+          className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
+            trackingEnabled ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-800'
+          }`}
+        >
+          <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {trackingEnabled ? 'Отслеживание включено' : 'Включить отслеживание'}
+        </button>
+      </div>
 
       <div className="flex flex-col lg:flex-row-reverse gap-6 mb-8 items-start">
         <div className="lg:w-1/2 relative z-10">
@@ -333,27 +447,21 @@ export default function RoutePage({ params }: { params: { id: string } }) {
             visible={navigationMode && currentLocation !== null}
           />
 
-          {/* Кнопка "В путь" */}
-          <div className="absolute bottom-4 right-4 z-50">
-            <button
-              onClick={toggleNavigationMode}
-              className={`px-6 py-3 rounded-full shadow-lg flex items-center ${
-                navigationMode ? 'bg-red-600' : 'bg-blue-600'
-              } text-white font-medium`}
-            >
-              {navigationMode ? (
-                <>
-                  <PauseIcon className="h-5 w-5 mr-2" />
-                  Остановить
-                </>
-              ) : (
-                <>
-                  <PlayIcon className="h-5 w-5 mr-2" />
-                  В путь
-                </>
-              )}
-            </button>
-          </div>
+          {/* Анимированная стрелка на маршруте - всегда отображается */}
+          <AnimatedRoute
+            map={mapRef.current}
+            routePoints={routeData.routePoints as [number, number][]}
+          />
+
+          {/* Анимированная стрелка на маршруте между домами */}
+          {homePositions.length > 1 && (
+            <AnimatedRoute
+              map={mapRef.current}
+              routePoints={homePositions}
+            />
+          )}
+
+          {/* Кнопка "В путь" перемещена из карты */}
         </div>
 
         <div className="lg:w-1/2 space-y-6">
@@ -424,21 +532,8 @@ export default function RoutePage({ params }: { params: { id: string } }) {
 
       {!navigationMode ? (
         <div className="bg-white p-4 rounded-lg shadow-md mb-8 relative z-40">
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4">
           <h2 className="text-xl font-semibold">Навигация</h2>
-
-          <button
-            onClick={() => setTrackingEnabled(!trackingEnabled)}
-            className={`px-4 py-2 rounded-md flex items-center ${
-              trackingEnabled ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
-            }`}
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {trackingEnabled ? 'Отслеживание включено' : 'Включить отслеживание'}
-          </button>
         </div>
 
         <div className="flex items-center justify-between">
@@ -477,13 +572,45 @@ export default function RoutePage({ params }: { params: { id: string } }) {
         </div>
       </div>
       ) : (
-        <NavigationPanel
-          currentPosition={currentLocation}
-          nextStopName={routeData.stops[activeStep].name}
-          nextStopDistance={nextStopDistance}
-          estimatedTime={routeData.stops[activeStep].estimatedTime}
-          onExit={() => setNavigationMode(false)}
-        />
+        <>
+          {/* Обычная панель навигации (когда не в режиме экрана навигатора) */}
+          {!showNavigatorScreen && (
+            <NavigationPanel
+              currentPosition={currentLocation}
+              nextStopName={routeData.stops[activeStep].name}
+              nextStopDistance={nextStopDistance}
+              estimatedTime={routeData.stops[activeStep].estimatedTime}
+              onExit={() => setNavigationMode(false)}
+              targetPosition={routeData.stops[activeStep].position as [number, number]}
+              routeProgress={((activeStep + 1) / routeData.stops.length) * 100}
+              currentSpeed={currentSpeed}
+              onNextStop={handleNextStep}
+              onPrevStop={handlePrevStep}
+              totalStops={routeData.stops.length}
+              currentStopIndex={activeStep}
+              onSwitchToNavigatorScreen={toggleNavigatorScreen}
+            />
+          )}
+
+          {/* Экран навигатора */}
+          {showNavigatorScreen && (
+            <NavigatorScreen
+              currentPosition={currentLocation}
+              targetPosition={routeData.stops[activeStep].position as [number, number]}
+              nextStopName={routeData.stops[activeStep].name}
+              nextStopDistance={nextStopDistance}
+              estimatedTime={routeData.stops[activeStep].estimatedTime}
+              onExit={() => setNavigationMode(false)}
+              onSwitchToMap={toggleNavigatorScreen}
+              onNextStop={handleNextStep}
+              onPrevStop={handlePrevStep}
+              totalStops={routeData.stops.length}
+              currentStopIndex={activeStep}
+              routeProgress={((activeStep + 1) / routeData.stops.length) * 100}
+              currentSpeed={currentSpeed}
+            />
+          )}
+        </>
       )}
 
       {!navigationMode && (
