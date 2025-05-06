@@ -460,7 +460,6 @@ export default function RoutePage({ params }: { params: { id: string } }) {
               routePoints={homePositions}
             />
           )}
-
           {/* Кнопка "В путь" перемещена из карты */}
         </div>
 
