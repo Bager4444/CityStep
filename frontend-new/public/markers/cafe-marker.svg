@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Cafe Marker</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="#D97706" cx="16" cy="16" r="16"></circle>
+        <path d="M16,7 C20.418278,7 24,10.581722 24,15 C24,19.418278 16,25 16,25 C16,25 8,19.418278 8,15 C8,10.581722 11.581722,7 16,7 Z" fill="#FFFFFF"></path>
+        <path d="M20,12 L12,12 C11.4477153,12 11,12.4477153 11,13 L11,15 C11,16.6568542 12.3431458,18 14,18 L18,18 C19.6568542,18 21,16.6568542 21,15 L21,13 C21,12.4477153 20.5522847,12 20,12 Z" fill="#D97706"></path>
+        <rect fill="#D97706" x="12" y="19" width="8" height="1" rx="0.5"></rect>
+    </g>
+</svg>
