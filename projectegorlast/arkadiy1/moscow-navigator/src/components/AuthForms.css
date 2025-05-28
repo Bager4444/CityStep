@@ -1,0 +1,241 @@
+/* Стили для форм аутентификации */
+
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.auth-form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-form-header h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.auth-form-header p {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.auth-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Группы полей формы */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  background: white;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-group input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.form-group input:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Поле пароля с кнопкой показать/скрыть */
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  flex: 1;
+  padding-right: 3rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.password-toggle:hover {
+  background-color: #f8f9fa;
+}
+
+.password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Ошибки */
+.auth-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #f5c6cb;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.field-error {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+/* Демо-секция */
+.demo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px dashed #dee2e6;
+}
+
+.demo-button {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.demo-button:hover:not(:disabled) {
+  background-color: #138496;
+}
+
+.demo-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.demo-section small {
+  color: #6c757d;
+  font-size: 0.8rem;
+}
+
+/* Действия формы */
+.auth-form-actions {
+  margin-top: 1rem;
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-primary:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Переключение между формами */
+.auth-form-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e1e5e9;
+}
+
+.auth-form-switch p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.link-button:hover:not(:disabled) {
+  color: #0056b3;
+}
+
+.link-button:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .auth-form {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .auth-form-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .form-group input {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .btn-primary {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
