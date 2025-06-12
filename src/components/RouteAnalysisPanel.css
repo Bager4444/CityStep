@@ -1,0 +1,520 @@
+/* 📊 Стили для панели анализа маршрута */
+
+.route-analysis-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.route-analysis-panel {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.analysis-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.analysis-tabs {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.tab.active {
+  color: #28a745;
+  border-bottom-color: #28a745;
+  background: white;
+}
+
+.analysis-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+/* Обзор */
+.route-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.priority-score {
+  text-align: center;
+}
+
+.score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  position: relative;
+}
+
+.score-circle::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.score-value {
+  position: relative;
+  z-index: 1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.priority-score h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.route-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.stat-item {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  display: block;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.factors-breakdown h4 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.factors-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.factor-bar {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.factor-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.factor-icon {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.factor-name {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+
+.factor-weight {
+  font-weight: 600;
+  color: #28a745;
+}
+
+.factor-progress {
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.factor-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  transition: width 0.3s ease;
+}
+
+/* Сегменты */
+.segments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.segment-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.segment-item:hover {
+  border-color: #28a745;
+  transform: translateY(-1px);
+}
+
+.segment-item.selected {
+  border-color: #28a745;
+  background: #f0fff4;
+}
+
+.segment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.segment-icon {
+  font-size: 1.2rem;
+}
+
+.segment-name {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+
+.segment-priority {
+  font-weight: 600;
+  color: #28a745;
+}
+
+.segment-details {
+  padding: 0 16px 16px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 8px;
+  padding-top: 16px;
+}
+
+.segment-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.segment-scores h5 {
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.score-label {
+  min-width: 100px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.score-bar {
+  flex: 1;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  transition: width 0.3s ease;
+}
+
+.score-value {
+  min-width: 40px;
+  text-align: right;
+  font-weight: 500;
+  color: #28a745;
+}
+
+/* Альтернативы */
+.alternatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.alternative-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.alternative-card:hover {
+  border-color: #28a745;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.15);
+}
+
+.alternative-header h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.alternative-header p {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.alternative-config {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.config-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.select-alternative-btn {
+  width: 100%;
+  padding: 10px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.select-alternative-btn:hover {
+  background: #218838;
+}
+
+/* Рекомендации */
+.no-recommendations {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.success-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.recommendation-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.recommendation-item.warning {
+  background: #fff3cd;
+  border-left-color: #ffc107;
+}
+
+.recommendation-item.traffic {
+  background: #f8d7da;
+  border-left-color: #dc3545;
+}
+
+.recommendation-item.safety {
+  background: #d1ecf1;
+  border-left-color: #17a2b8;
+}
+
+.recommendation-item.success {
+  background: #d4edda;
+  border-left-color: #28a745;
+}
+
+.rec-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.rec-content h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.rec-content p {
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+}
+
+.general-tips {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.general-tips h4 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.general-tips ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.general-tips li {
+  margin-bottom: 8px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .route-analysis-panel {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .analysis-content {
+    padding: 16px;
+  }
+  
+  .route-summary {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .alternatives-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analysis-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .tab {
+    flex: 1 1 50%;
+    min-width: 120px;
+  }
+}

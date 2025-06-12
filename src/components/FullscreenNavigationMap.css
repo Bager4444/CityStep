@@ -1,0 +1,267 @@
+/* Полноэкранная навигация */
+.fullscreen-navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Заголовок навигации */
+.fullscreen-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: #2c3e50;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10001;
+}
+
+.fullscreen-nav-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.close-nav-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.close-nav-btn:hover {
+  background: #c0392b;
+}
+
+.scale-info {
+  background: #34495e;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Контейнер карты */
+.fullscreen-nav-map {
+  flex: 1;
+  position: relative;
+  height: calc(100vh - 70px);
+  width: 100vw;
+}
+
+.fullscreen-nav-map .leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  background: #f0f0f0;
+}
+
+/* Панель следующего поворота */
+.next-turn-info {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 160px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #007bff;
+}
+
+.turn-icon {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.turn-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.turn-direction {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.turn-distance {
+  font-size: 14px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+/* Панель оставшегося расстояния */
+.remaining-info {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #007bff;
+  min-width: 280px;
+}
+
+.remaining-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remaining-icon {
+  font-size: 20px;
+}
+
+.remaining-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.remaining-separator {
+  width: 1px;
+  height: 40px;
+  background: #bdc3c7;
+}
+
+/* Ошибка навигации */
+.fullscreen-navigation-error {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background: #2c3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.fullscreen-navigation-error h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.fullscreen-navigation-error p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.fullscreen-navigation-error button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.fullscreen-navigation-error button:hover {
+  background: #c0392b;
+}
+
+/* Кастомные иконки */
+.navigation-arrow-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.user-location-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .fullscreen-nav-header {
+    padding: 10px 15px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .fullscreen-nav-header h2 {
+    font-size: 18px;
+  }
+
+  .close-nav-btn {
+    align-self: flex-end;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+  }
+
+  .next-turn-info {
+    top: 15px;
+    right: 15px;
+    padding: 12px;
+    min-width: 140px;
+  }
+
+  .turn-icon {
+    font-size: 28px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .turn-direction {
+    font-size: 14px;
+  }
+
+  .turn-distance {
+    font-size: 12px;
+  }
+
+  .remaining-info {
+    bottom: 15px;
+    padding: 12px 16px;
+    min-width: 240px;
+    gap: 15px;
+  }
+
+  .remaining-icon {
+    font-size: 18px;
+  }
+
+  .remaining-value {
+    font-size: 14px;
+  }
+}
