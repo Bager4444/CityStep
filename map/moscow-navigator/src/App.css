@@ -1,0 +1,1423 @@
+/* Основные стили приложения - новый макет */
+.app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  gap: 8px;
+  background: #f8f9fa;
+  padding: 8px;
+}
+
+.sidebar {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: white;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #e9ecef;
+}
+
+/* Заголовок сайдбара с кнопкой пользователя */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #3498db;
+}
+
+.sidebar h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 24px;
+  flex: 1;
+}
+
+/* Скрытие карты при открытом модальном окне аутентификации */
+.map-container.map-hidden {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Плейсхолдер вместо карты */
+.map-placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+}
+
+.map-placeholder-content {
+  max-width: 400px;
+  padding: 2rem;
+}
+
+.map-placeholder-content h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.map-placeholder-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.map-placeholder-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.feature:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Экран загрузки */
+.app-loading {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.loading-spinner {
+  text-align: center;
+  color: #667eea;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e3f2fd;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Адаптивность для плейсхолдера */
+@media (max-width: 768px) {
+  .map-placeholder-content h2 {
+    font-size: 2rem;
+  }
+
+  .map-placeholder-content p {
+    font-size: 1rem;
+  }
+
+  .map-placeholder-features {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .feature {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Карта в правом верхнем углу - четверть экрана */
+.map-container {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #e9ecef;
+  min-height: 280px;
+}
+
+/* Дополнительная панель справа снизу */
+.additional-panel {
+  grid-column: 2;
+  grid-row: 2;
+  background: white;
+  padding: 20px;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #e9ecef;
+}
+
+.map-wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Стили для селектора карт */
+.map-layer-selector {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.layer-selector-button {
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.layer-selector-button:hover {
+  background: #f8f9fa;
+  border-color: #3498db;
+}
+
+.layer-selector-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.layer-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  background: #f8f9fa;
+  border-radius: 8px 8px 0 0;
+}
+
+.layer-selector-header h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  color: #dc3545;
+}
+
+.layer-options {
+  padding: 8px 0;
+}
+
+.layer-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.layer-option:hover {
+  background: #f8f9fa;
+}
+
+.layer-option.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.layer-name {
+  font-size: 14px;
+}
+
+.checkmark {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.layer-selector-footer {
+  padding: 8px 16px;
+  border-top: 1px solid #eee;
+  background: #f8f9fa;
+  border-radius: 0 0 8px 8px;
+}
+
+.layer-selector-footer small {
+  color: #6c757d;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+/* Стили панели поиска */
+.search-panel {
+  margin-bottom: 30px;
+}
+
+.search-panel h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.search-form {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.search-input, .route-input {
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.search-input:focus, .route-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25);
+}
+
+.search-button, .route-button {
+  padding: 12px 20px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  margin-top: 10px;
+}
+
+.search-button:hover, .route-button:hover {
+  background: #2980b9;
+}
+
+.search-button:disabled, .route-button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Сообщения об ошибках */
+.error-message {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Результаты поиска */
+.search-results {
+  margin-top: 20px;
+}
+
+.search-results h4 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.result-item {
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.result-item:hover {
+  background: #e9ecef;
+}
+
+.result-title {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.result-address {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+/* Стили панели маршрутов */
+.route-panel {
+  border-top: 1px solid #dee2e6;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Стили панели навигации */
+.navigation-panel {
+  border-top: 1px solid #dee2e6;
+  padding-top: 20px;
+}
+
+.navigation-placeholder {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+.navigation-tips {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.navigation-tips h4 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.navigation-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation-tips li {
+  padding: 4px 0;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.navigation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.navigation-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.navigation-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.start-nav {
+  background: #28a745;
+  color: white;
+}
+
+.start-nav:hover {
+  background: #218838;
+}
+
+.stop-nav {
+  background: #dc3545;
+  color: white;
+}
+
+.stop-nav:hover {
+  background: #c82333;
+}
+
+.voice-toggle {
+  background: #6c757d;
+  color: white;
+}
+
+.voice-toggle:hover {
+  background: #5a6268;
+}
+
+.voice-toggle.active {
+  background: #007bff;
+}
+
+.voice-toggle.active:hover {
+  background: #0056b3;
+}
+
+/* Сводка маршрута */
+.route-summary {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #e9ecef;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.summary-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Текущее направление */
+.current-direction {
+  display: flex;
+  align-items: center;
+  background: #e3f2fd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 2px solid #2196f3;
+}
+
+.direction-arrow {
+  font-size: 32px;
+  margin-right: 15px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.direction-info {
+  flex: 1;
+}
+
+.direction-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 4px;
+}
+
+.distance-text {
+  font-size: 14px;
+  color: #424242;
+}
+
+/* Текущий шаг */
+.current-step {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.step-header {
+  margin-bottom: 10px;
+}
+
+.step-number {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.step-instruction {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.step-arrow {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.step-text {
+  font-size: 14px;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+.step-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.step-button {
+  flex: 1;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.step-button:hover:not(:disabled) {
+  background: #e9ecef;
+}
+
+.step-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Прогресс навигации */
+.navigation-progress {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* Список шагов */
+.steps-list {
+  margin-top: 20px;
+}
+
+.steps-list h4 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.steps-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.step-item:last-child {
+  border-bottom: none;
+}
+
+.step-item:hover {
+  background: #f8f9fa;
+}
+
+.step-item.active {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+}
+
+.step-item.completed {
+  background: #e8f5e8;
+}
+
+.step-icon {
+  font-size: 18px;
+  margin-right: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content .step-text {
+  font-size: 13px;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.step-distance {
+  font-size: 11px;
+  color: #6c757d;
+}
+
+/* Стили для стрелок направления на карте */
+.direction-arrow-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.direction-popup {
+  min-width: 200px;
+  text-align: center;
+}
+
+.direction-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.direction-emoji {
+  font-size: 24px;
+}
+
+.direction-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.direction-instruction {
+  font-size: 14px;
+  color: #34495e;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.direction-distance {
+  font-size: 12px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+/* Стили для компаса пользователя */
+.user-compass-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.compass-popup {
+  min-width: 180px;
+  text-align: center;
+}
+
+.compass-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.compass-icon {
+  font-size: 20px;
+}
+
+.compass-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.compass-heading {
+  font-size: 13px;
+  color: #34495e;
+  margin-bottom: 4px;
+}
+
+.compass-direction {
+  font-size: 12px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+/* Анимации для стрелок */
+@keyframes arrowPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.direction-arrow-active {
+  animation: arrowPulse 2s infinite;
+}
+
+/* Стили для навигационных элементов на карте */
+.navigation-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.navigation-overlay.active {
+  background: rgba(33, 150, 243, 0.95);
+  color: white;
+}
+
+.navigation-overlay-direction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.navigation-overlay-arrow {
+  font-size: 24px;
+  animation: pulse 2s infinite;
+}
+
+.navigation-overlay-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.navigation-overlay-distance {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+  .direction-popup {
+    min-width: 150px;
+  }
+
+  .direction-emoji {
+    font-size: 20px;
+  }
+
+  .direction-text {
+    font-size: 14px;
+  }
+
+  .direction-instruction {
+    font-size: 12px;
+  }
+
+  .navigation-overlay {
+    top: 5px;
+    right: 5px;
+    padding: 8px;
+  }
+
+  .navigation-overlay-arrow {
+    font-size: 20px;
+  }
+
+  .navigation-overlay-text {
+    font-size: 12px;
+  }
+}
+
+.route-panel h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.route-inputs {
+  margin-bottom: 20px;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 8px;
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.location-button {
+  padding: 8px 12px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.location-button:hover {
+  background: #218838;
+}
+
+.swap-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.swap-button {
+  padding: 8px 12px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.swap-button:hover {
+  background: #5a6268;
+}
+
+/* Информация о маршруте */
+.route-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e8f4fd;
+  border-radius: 6px;
+  border: 1px solid #bee5eb;
+}
+
+.route-info h4 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.route-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Подсказки */
+.search-tips, .route-tips {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.search-tips h4, .route-tips h4 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.search-tips ul, .route-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-tips li, .route-tips li {
+  padding: 4px 0;
+  color: #6c757d;
+  font-size: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.search-tips li:last-child, .route-tips li:last-child {
+  border-bottom: none;
+}
+
+/* Кнопка "В путь" */
+.journey-button {
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.journey-button:hover {
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.journey-button:active {
+  transform: translateY(0);
+}
+
+/* Полноэкранная карта */
+.fullscreen-map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.fullscreen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: #2c3e50;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fullscreen-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.close-fullscreen-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.close-fullscreen-btn:hover {
+  background: #c0392b;
+}
+
+.scale-info {
+  background: #34495e;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fullscreen-map-component {
+  flex: 1;
+  height: calc(100vh - 70px);
+}
+
+.fullscreen-map-component .leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  transition: transform 1s ease-in-out;
+  transform-origin: center center;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.fullscreen-map-component .leaflet-container .leaflet-interactive {
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+/* Отключаем все взаимодействия с картой */
+.leaflet-container {
+  cursor: default !important;
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+.leaflet-container * {
+  cursor: default !important;
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+/* Дополнительная блокировка для всех элементов Leaflet */
+.leaflet-control-container,
+.leaflet-control-zoom,
+.leaflet-control-attribution,
+.leaflet-clickable,
+.leaflet-interactive {
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+/* Отключаем выделение текста */
+.leaflet-container {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Фиксированная стрелка в центре экрана */
+.fixed-navigation-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  pointer-events: auto !important;
+}
+
+/* Панель следующего поворота */
+.next-turn-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 160px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #007bff;
+}
+
+.turn-icon {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.turn-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.turn-direction {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-transform: capitalize;
+}
+
+.turn-distance {
+  font-size: 14px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+/* Панель оставшегося расстояния и времени */
+.remaining-info-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #007bff;
+  min-width: 280px;
+}
+
+.remaining-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.remaining-icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.remaining-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.remaining-label {
+  font-size: 12px;
+  color: #7f8c8d;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.remaining-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.remaining-separator {
+  width: 1px;
+  height: 40px;
+  background: #bdc3c7;
+  margin: 0 5px;
+}
+
+/* Стрелка навигации как маркер на карте (не используется) */
+.navigation-arrow-marker {
+  background: transparent !important;
+  border: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigation-arrow-triangle {
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 52px solid #007bff;
+  transform: rotate(0deg);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: arrowPulse 2s infinite ease-in-out;
+}
+
+@keyframes arrowPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .map-container {
+    height: 60vh;
+  }
+
+  .fullscreen-header {
+    padding: 10px 15px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .fullscreen-header h2 {
+    font-size: 18px;
+  }
+
+  .close-fullscreen-btn {
+    align-self: flex-end;
+  }
+}
+
+/* Стили для сегментов маршрута */
+.segments-details {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.segments-details h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.segment-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.segment-item:last-child {
+  border-bottom: none;
+}
+
+.segment-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.segment-info {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.segment-distance,
+.segment-duration {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.segment-distance {
+  color: #28a745;
+}
+
+.segment-duration {
+  color: #fd7e14;
+}

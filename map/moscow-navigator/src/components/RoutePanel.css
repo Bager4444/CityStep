@@ -1,0 +1,464 @@
+/* Стили для RoutePanel */
+.route-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.route-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.transport-badge {
+  background: #007bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.route-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.route-stat:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Стили для информации о такси */
+.taxi-price {
+  background: linear-gradient(135deg, #fd7e14, #ff9500);
+  color: white;
+  border-radius: 8px;
+  padding: 12px !important;
+  margin: 8px 0;
+  border: none !important;
+}
+
+.taxi-price .stat-label {
+  color: white !important;
+  font-weight: 600;
+}
+
+.taxi-cost {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  color: white !important;
+}
+
+/* Стили для пользовательского времени */
+.user-time {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border-radius: 8px;
+  padding: 12px !important;
+  margin: 8px 0;
+  border: none !important;
+}
+
+.user-time .stat-label {
+  color: white !important;
+  font-weight: 600;
+}
+
+.user-time .stat-value {
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Стили для подсказки времени */
+.time-hint {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+  border: 1px solid #bbdefb;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #1565c0;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Стили для кнопки автопоиска */
+.auto-destination-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auto-destination-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.auto-destination-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.taxi-info {
+  background: #fff3e0;
+  border: 1px solid #ffcc80;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.tariff-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #e65100;
+}
+
+.tariff-icon {
+  font-size: 16px;
+}
+
+.tariff-text {
+  font-size: 14px;
+}
+
+.taxi-breakdown {
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.taxi-services {
+  color: #555;
+  font-size: 11px;
+  line-height: 1.3;
+  padding: 6px 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  border-left: 3px solid #fd7e14;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Стили для промежуточных точек */
+.waypoints-section {
+  margin: 16px 0;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.waypoints-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.waypoints-section h4 {
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auto-middle-btn {
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.auto-middle-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #138496, #117a8b);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+}
+
+.auto-middle-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.waypoints-list {
+  margin-bottom: 12px;
+}
+
+.waypoint-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.waypoint-item:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+}
+
+.waypoint-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.waypoint-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.waypoint-address {
+  font-size: 13px;
+  color: #333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.waypoint-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.move-btn, .remove-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.move-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.move-btn:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.move-btn:disabled {
+  background: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.remove-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.remove-btn:hover {
+  background: #c82333;
+}
+
+.add-waypoint {
+  display: flex;
+  gap: 8px;
+}
+
+.waypoint-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: border-color 0.2s ease;
+}
+
+.waypoint-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.add-waypoint-btn {
+  padding: 8px 12px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-waypoint-btn:hover {
+  background: #218838;
+}
+
+.route-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.route-button {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.route-button.primary {
+  background: #007bff;
+  color: white;
+}
+
+.route-button.primary:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.route-button.primary:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.route-button.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.route-button.secondary:hover {
+  background: #5a6268;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .route-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .transport-badge {
+    align-self: flex-end;
+  }
+
+  .route-stat {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .taxi-info {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .taxi-cost {
+    font-size: 16px !important;
+  }
+
+  .taxi-breakdown,
+  .taxi-services {
+    font-size: 11px;
+  }
+}
